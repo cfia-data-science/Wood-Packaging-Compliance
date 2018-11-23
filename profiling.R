@@ -30,23 +30,22 @@ plot(GKmatrix)
 data_wp <- data %>% filter(Packaging.Material != "MP")
 non_compliant_wp <- as.data.frame(table(data_wp$Compliant..Y.N., useNA = "ifany"))
 ggplot(data = data_wp) + 
-  geom_bar(mapping=aes(x= Compliant..Y.N.), width=0.4, fill = "cadetblue2" ) +
-  theme(plot.background=element_blank()) +
-  theme(panel.background=element_blank()) + 
-  theme(aspect.ratio = 2/1.5) + 
+  geom_bar(width=0.4, mapping=aes(x= Compliant..Y.N., fill = Compliant..Y.N.))+
+  theme(aspect.ratio = 2:5) + 
   scale_x_discrete(name = "Compliance")+
   scale_y_continuous("Count") +
   ggtitle("Compliance Rate for WP Packages", subtitle = "85.7% compliant") + 
-  theme_stata()
+  theme_minimal()
+
 
   # find compliance rate for non-wp packages
 data_mp <- data %>% filter(Packaging.Material == "MP")
 non_compliant_mp <- as.data.frame(table(data_mp$Compliant..Y.N., useNA = "ifany"))
 ggplot(data = data_mp) + 
-  geom_bar(mapping=aes(x= Compliant..Y.N.), width=0.4, fill="cadetblue2" ) +
+  geom_bar(mapping=aes(x= Compliant..Y.N., fill= Compliant..Y.N.), width=0.4 ) +
   theme(plot.background=element_blank()) +
-  theme(panel.background=element_blank()) + 
-  theme(aspect.ratio = 2/1.5) + 
+  theme(panel.background=element_blank(), legend.position="none") + 
+  theme(aspect.ratio = 3/100) + 
   scale_x_discrete(name = "Compliance")+
   scale_y_continuous("Count") +
   ggtitle("Compliance Rate for Non-WP Packages", subtitle = "99.678% compliant") + 
@@ -73,7 +72,7 @@ shipper_countries$Var1 <- factor(shipper_countries$Var1)
 shipper_countries_major<- shipper_countries_major[order(-shipper_countries_major$Freq),]
 
 ggplot(data = shipper_countries) + 
-  geom_bar(mapping=aes(x= reorder(Var1, -Freq), y = Freq), width=0.8, stat = "identity", fill="cadetblue2" ) +
+  geom_bar(mapping=aes(x= reorder(Var1, -Freq), y = Freq, fill=Var1), width=0.8, stat = "identity") +
   theme(plot.background=element_blank()) +
   theme(panel.background=element_blank()) + 
   theme(aspect.ratio = 2/1.5) + 
@@ -81,7 +80,7 @@ ggplot(data = shipper_countries) +
   scale_y_continuous("Count") +
   ggtitle("Shipper Country", subtitle = "Count>300") + 
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
 
 
 # find data distribution on port of entry
@@ -90,8 +89,8 @@ port_of_entry <- as.data.frame(table(data$Port.of.Entry..map., useNA = "ifany"))
   # layout(title = "Port of Entry",
   #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
   #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
-  ggplot(data = port_of_entry) + 
-  geom_bar(mapping=aes(x= reorder(Var1, -Freq) , y = Freq), width=0.8, stat = "identity", fill="cadetblue2" ) +
+ggplot(data = port_of_entry) + 
+  geom_bar(mapping=aes(x= reorder(Var1, -Freq) , y = Freq, fill = Var1), width=0.8, stat = "identity" ) +
   theme(plot.background=element_blank()) +
   theme(panel.background=element_blank()) + 
   theme(aspect.ratio = 2/1.5) + 
@@ -99,7 +98,7 @@ port_of_entry <- as.data.frame(table(data$Port.of.Entry..map., useNA = "ifany"))
   scale_y_continuous("Count") +
   ggtitle("Port of Entry") + 
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
   
 
 # find data distribution on packaging material
@@ -109,8 +108,8 @@ packaging_material <- as.data.frame(table(data$Packaging.Material, useNA = "ifan
   #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
   #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
   
-  ggplot(data = packaging_material, mapping = aes(reorder(Var1, -Freq) , y = Freq)) + 
-  geom_bar(width=0.5, stat = "identity", fill = "cadetblue2" ) +
+ggplot(data = packaging_material, mapping = aes(reorder(Var1, -Freq) , y = Freq, fill = Var1)) + 
+  geom_bar(width=0.5, stat = "identity") +
   theme(plot.background=element_blank()) +
   theme(panel.background=element_blank()) + 
   theme(aspect.ratio = 2/1.5) + 
@@ -118,7 +117,7 @@ packaging_material <- as.data.frame(table(data$Packaging.Material, useNA = "ifan
   scale_y_continuous("Count") +
   ggtitle("Packaging Material") + 
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
 
 # find data distribution on goods category
 goods_category <- as.data.frame(table(data$Goods.Category, useNA = "ifany"))
@@ -127,8 +126,8 @@ goods_category <- as.data.frame(table(data$Goods.Category, useNA = "ifany"))
   #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
   #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
-ggplot(data = goods_category, mapping = aes(reorder(Var1, -Freq) , y = Freq)) + 
-  geom_bar(width=0.5, stat = "identity" , fill = "cadetblue2") +
+ggplot(data = goods_category, mapping = aes(reorder(Var1, -Freq) , y = Freq, fill = Var1)) + 
+  geom_bar(width=0.5, stat = "identity") +
   theme(plot.background=element_blank()) +
   theme(panel.background=element_blank()) + 
   theme(aspect.ratio = 2/1.5) + 
@@ -136,7 +135,7 @@ ggplot(data = goods_category, mapping = aes(reorder(Var1, -Freq) , y = Freq)) +
   scale_y_continuous("Count") +
   ggtitle("Goods Category") + 
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
 
 ippc_mark <- as.data.frame(table(data$IPPC.Mark, useNA = "ifany"))
 plot_ly(ippc_mark, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
@@ -151,8 +150,8 @@ month <- as.data.frame(table(data$Month, useNA = "ifany"))
 #          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
 #          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
 
-ggplot(data = month, mapping = aes(x = Var1 , y = Freq)) + 
-  geom_bar(width=0.5, stat = "identity", fill= "cadetblue2" ) +
+ggplot(data = month, mapping = aes(x = Var1 , y = Freq, fill= Var1 )) + 
+  geom_bar(width=0.5, stat = "identity") +
   theme(plot.background=element_blank()) +
   theme(panel.background=element_blank()) + 
   theme(aspect.ratio = 2/1.5) + 
@@ -160,7 +159,7 @@ ggplot(data = month, mapping = aes(x = Var1 , y = Freq)) +
   scale_y_continuous("Count") +
   ggtitle("Shimpent in Month") + 
   theme_stata() +
-  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  theme(axis.text.x = element_text(angle = 90, hjust = 1),legend.position="none")
 
 # find distribution of shipping country on each port of entry
 data_halifax <- data[which(data$Port.of.Entry..map. == "Halifax, Nova Scotia"), ]
