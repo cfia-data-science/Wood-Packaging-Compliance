@@ -29,54 +29,114 @@ plot(GKmatrix)
 # find compliance rate for wp packages
 data_wp <- data %>% filter(Packaging.Material != "MP")
 non_compliant_wp <- as.data.frame(table(data_wp$Compliant..Y.N., useNA = "ifany"))
-plot_ly(non_compliant_wp, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "auto", textinfo = "label+percent") %>%
-  layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+ggplot(data = data_wp) + 
+  geom_bar(mapping=aes(x= Compliant..Y.N.), width=0.4, fill = "cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Compliance")+
+  scale_y_continuous("Count") +
+  ggtitle("Compliance Rate for WP Packages", subtitle = "85.7% compliant") + 
+  theme_stata()
 
-# find compliance rate for non-wp packages
+  # find compliance rate for non-wp packages
 data_mp <- data %>% filter(Packaging.Material == "MP")
 non_compliant_mp <- as.data.frame(table(data_mp$Compliant..Y.N., useNA = "ifany"))
-plot_ly(non_compliant_mp, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "auto", textinfo = "label+percent") %>%
-  layout(xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+ggplot(data = data_mp) + 
+  geom_bar(mapping=aes(x= Compliant..Y.N.), width=0.4, fill="cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Compliance")+
+  scale_y_continuous("Count") +
+  ggtitle("Compliance Rate for Non-WP Packages", subtitle = "99.678% compliant") + 
+  theme_stata()
 
-# find data distribution on shipper country
+#find data distribution on shipper country
 shipper_countries <- as.data.frame(table(data$Shipper.Country, useNA = "ifany"))
 shipper_countries_major <- subset(shipper_countries,
                                   shipper_countries[, 2] > 300)
 shipper_countries_minor <- subset(shipper_countries,
                                   shipper_countries[, 2] <= 300)
+
 shipper_countries_major$Var1 <- as.character(shipper_countries_major$Var1)
 shipper_countries <- rbind(shipper_countries_major,
                            list(Var1 = "Other",
                                 Freq = sum(shipper_countries_minor$Freq)),
                            stringsAsFactors = FALSE)
 shipper_countries$Var1 <- factor(shipper_countries$Var1)
-plot_ly(shipper_countries, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
-  layout(title = "Shipper Country",
-         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+# plot_ly(shipper_countries, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
+#   layout(title = "Shipper Country",
+#          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+#          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+shipper_countries_major<- shipper_countries_major[order(-shipper_countries_major$Freq),]
+
+ggplot(data = shipper_countries) + 
+  geom_bar(mapping=aes(x= reorder(Var1, -Freq), y = Freq), width=0.8, stat = "identity", fill="cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Country")+
+  scale_y_continuous("Count") +
+  ggtitle("Shipper Country", subtitle = "Count>300") + 
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+
 
 # find data distribution on port of entry
 port_of_entry <- as.data.frame(table(data$Port.of.Entry..map., useNA = "ifany"))
-plot_ly(port_of_entry, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
-  layout(title = "Port of Entry",
-         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+#plot_ly(port_of_entry, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
+  # layout(title = "Port of Entry",
+  #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+  #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  ggplot(data = port_of_entry) + 
+  geom_bar(mapping=aes(x= reorder(Var1, -Freq) , y = Freq), width=0.8, stat = "identity", fill="cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Port of Entry")+
+  scale_y_continuous("Count") +
+  ggtitle("Port of Entry") + 
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
+  
 
 # find data distribution on packaging material
 packaging_material <- as.data.frame(table(data$Packaging.Material, useNA = "ifany"))
-plot_ly(packaging_material, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
-  layout(title = "Packaging Material",
-         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+#plot_ly(packaging_material, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
+  # layout(title = "Packaging Material",
+  #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+  #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+  
+  ggplot(data = packaging_material, mapping = aes(reorder(Var1, -Freq) , y = Freq)) + 
+  geom_bar(width=0.5, stat = "identity", fill = "cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Packaging Material")+
+  scale_y_continuous("Count") +
+  ggtitle("Packaging Material") + 
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 # find data distribution on goods category
 goods_category <- as.data.frame(table(data$Goods.Category, useNA = "ifany"))
-plot_ly(goods_category, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
-  layout(title = "Goods Category",
-         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+#plot_ly(goods_category, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
+  # layout(title = "Goods Category",
+  #        xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+  #        yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+ggplot(data = goods_category, mapping = aes(reorder(Var1, -Freq) , y = Freq)) + 
+  geom_bar(width=0.5, stat = "identity" , fill = "cadetblue2") +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Goods Category")+
+  scale_y_continuous("Count") +
+  ggtitle("Goods Category") + 
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 ippc_mark <- as.data.frame(table(data$IPPC.Mark, useNA = "ifany"))
 plot_ly(ippc_mark, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
@@ -86,10 +146,21 @@ plot_ly(ippc_mark, labels = ~ Var1, values = ~ Freq, type = "pie", textposition 
 
 # find data distribution on month
 month <- as.data.frame(table(data$Month, useNA = "ifany"))
-plot_ly(month, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
-  layout(title = "Month",
-         xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
-         yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+# plot_ly(month, labels = ~ Var1, values = ~ Freq, type = "pie", textposition = "top center", textinfo = "label+percent") %>%
+#   layout(title = "Month",
+#          xaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE),
+#          yaxis = list(showgrid = FALSE, zeroline = FALSE, showticklabels = FALSE))
+
+ggplot(data = month, mapping = aes(x = Var1 , y = Freq)) + 
+  geom_bar(width=0.5, stat = "identity", fill= "cadetblue2" ) +
+  theme(plot.background=element_blank()) +
+  theme(panel.background=element_blank()) + 
+  theme(aspect.ratio = 2/1.5) + 
+  scale_x_discrete(name = "Month")+
+  scale_y_continuous("Count") +
+  ggtitle("Shimpent in Month") + 
+  theme_stata() +
+  theme(axis.text.x = element_text(angle = 90, hjust = 1))
 
 # find distribution of shipping country on each port of entry
 data_halifax <- data[which(data$Port.of.Entry..map. == "Halifax, Nova Scotia"), ]
