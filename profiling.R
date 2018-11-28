@@ -701,3 +701,15 @@ data_targeted <- data_wp[data_wp$Shipper.Country == "China"
                          | (data_wp$Goods.Category == "Building Material" & data_wp$Shipper.Country == "Brazil"), ]
 nrow(data_targeted[data_targeted$Compliant..Y.N. == "N", ])
 (nrow(data_wp[data_wp$Compliant..Y.N. == "N", ]) - nrow(data_targeted[data_targeted$Compliant..Y.N. == "N", ])) / nrow(data_wp[data_wp$Compliant..Y.N. == "N", ])
+
+#breaking down compliance by packaging and year
+yearSumPackaging<- as.data.frame.array(table(data$year, data$Compliant..Y.N.,data$Packaging.Material))
+yearSumPackaging$year<- c(2009:2018)
+
+grid.table(yearSumPackaging)
+
+yearSumPackaging.m<-melt(yearSumPackaging, id.vars = "year")
+
+ggplot()+
+  geom_bar(width = 0.7, data = yearSumPackaging.m, mapping = aes(year, value, fill=variable), stat="identity", position = position_dodge())+
+  ggtitle("Compliance by Year", subtitle = "2009-2018")
