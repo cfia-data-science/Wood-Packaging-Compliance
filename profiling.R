@@ -1,6 +1,8 @@
 # find redundancy in the dataset - pearson correlation matrix
+# data has been reduced to only include relevant variables
 data_numeric <- as.data.frame(sapply(data, norminal_to_numeric))
-cormat <- cor(data_numeric[, -12], use = "pairwise.complete.obs")
+data_reduced<- data_numeric[,c(2,3,4,7,8,10,12)]
+cormat <- cor(data_reduced, use = "pairwise.complete.obs")
 upper_tri <- get_upper_tri(cormat)
 melted_cormat <- melt(upper_tri, na.rm = TRUE)
 ggplot_pearsoncormat <- ggplot(data = melted_cormat, aes(Var2, Var1, fill = value)) +
@@ -13,9 +15,10 @@ ggplot_pearsoncormat <- ggplot(data = melted_cormat, aes(Var2, Var1, fill = valu
     axis.title.x = element_blank(),
     axis.title.y = element_blank(),
     axis.text.x = element_text(angle = 45, hjust = 1)
-    ) +
+  ) +
   coord_fixed()
 plot(ggplot_pearsoncormat)
+
 
 # find redundancy in the dataset - GKtau matrix
 data_cor <- subset(data, select = c("IPPC.Mark", "Packaging.Material", "Port.of.Entry..map.", "Shipper.Country", "Goods.Category", "Month"))
