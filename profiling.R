@@ -5,8 +5,10 @@ data_reduced<- data_numeric[,c(2,3,4,7,8,10,12)]
 cormat <- cor(data_reduced, use = "pairwise.complete.obs")
 upper_tri <- get_upper_tri(cormat)
 melted_cormat <- melt(upper_tri, na.rm = TRUE)
-ggplot_pearsoncormat <- ggplot(data = melted_cormat, aes(Var2, Var1, fill = value)) +
+melted_cormat <- melted_cormat %>% mutate_at(vars(value), funs(round(., 2)))
+ggplot(data = melted_cormat, aes(Var2, Var1, fill = value)) +
   geom_tile(color = "white") +
+  geom_text(aes(label=value)) +
   scale_fill_gradient2(low = "blue", high = "red", mid = "white", 
                        midpoint = 0, limit = c(-1, 1), space = "Lab", 
                        name="Pearson\nCorrelation") +
@@ -17,7 +19,7 @@ ggplot_pearsoncormat <- ggplot(data = melted_cormat, aes(Var2, Var1, fill = valu
     axis.text.x = element_text(angle = 45, hjust = 1)
   ) +
   coord_fixed()
-plot(ggplot_pearsoncormat)
+
 
 
 # find redundancy in the dataset - GKtau matrix
