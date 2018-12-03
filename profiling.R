@@ -1,8 +1,8 @@
 # find redundancy in the dataset - pearson correlation matrix
 # data has been reduced to only include relevant variables
 data_numeric <- as.data.frame(sapply(data, norminal_to_numeric))
-data_reduced<- data_numeric[,c(2,3,4,7,8,10,12)]
-cormat <- cor(data_reduced, use = "pairwise.complete.obs")
+data_reduced_numeric<- data_numeric[,c(2,3,4,7,8,10,12)]
+cormat <- cor(data_reduced_numeric, use = "pairwise.complete.obs")
 upper_tri <- get_upper_tri(cormat)
 melted_cormat <- melt(upper_tri, na.rm = TRUE)
 melted_cormat <- melted_cormat %>% mutate_at(vars(value), funs(round(., 2)))
