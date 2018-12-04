@@ -1,6 +1,5 @@
 data_reduced <- data[,c(2,3,4,6,7,8,10,12)]
 
-chisq.test(data_reduced_chimatrix$Shipper.Country,data_reduced_chimatrix$Shipper.City)
 
 #code below shoudl work but doesn't because dataset is too large for memory
 # m=matrix(nrow = ncol(data_reduced), ncol=ncol(data_reduced))
@@ -89,7 +88,7 @@ m[8,6]<-GKtau(data_reduced[,8],data_reduced[,6])$tauxy
 m[8,7]<-GKtau(data_reduced[,8],data_reduced[,7])$tauxy
 m[8,8]<-GKtau(data_reduced[,8],data_reduced[,8])$tauxy
 
-
+#Plot of GK associations 
 title <- "Goodman Kurskal Associations"
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
 corrplot(m, method="color", col=col(200), 
@@ -98,4 +97,5 @@ corrplot(m, method="color", col=col(200),
          mar=c(0,0,1,0) # fix location of title
 )
 
+#alternate plot
 corrplot(m,method = "number")
