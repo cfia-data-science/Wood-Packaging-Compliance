@@ -2,19 +2,7 @@ data_reduced <- data[,c(2,3,4,6,7,8,10,12)]
 
 chisq.test(data_reduced_chimatrix$Shipper.Country,data_reduced_chimatrix$Shipper.City)
 
-chisqmatrix <- function(x) {
-  names = colnames(x);  num = length(names)
-  m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
-  for (i in 1:num) {
-    for (j in 1:num) {
-      m[i,j] = GKtau(x[,i],x[,j])$tauxy
-    }
-  }
-  return (m)
-}
-
-
-
+#code below shoudl work but doesn't because dataset is too large for memory
 # m=matrix(nrow = ncol(data_reduced), ncol=ncol(data_reduced))
 # for(i in 1:ncol(data_reduced)){
 #   for (j in 1:ncol(data_reduced)){
@@ -22,7 +10,9 @@ chisqmatrix <- function(x) {
 #   }
 # }
 
-library(GoodmanKruskal)
+#GKmatrix<- GKtauDataframe(data_reduced)
+
+#matrix had to be hard coded due to certain values requiring too much data to process
 
 names = colnames(data_reduced);  num = length(names)
 m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
@@ -103,7 +93,9 @@ m[8,8]<-GKtau(data_reduced[,8],data_reduced[,8])$tauxy
 title <- "Goodman Kurskal Associations"
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
 corrplot(m, method="color", col=col(200), 
-         title=title, 
+         title=title,
          addCoef.col = "black", # Add coefficient of correlation
-         mar=c(0,0,1,0)
-) 
+         mar=c(0,0,1,0) # fix location of title
+)
+
+corrplot(m,method = "number")
