@@ -161,3 +161,23 @@ corrplot(m, method="color", col=col(200),
          addCoef.col = "black", # Add coefficient of correlation
          mar=c(0,0,1,0)
 ) 
+
+library(grid)
+library(gridExtra)
+library(gtable)
+
+t1 <- tableGrob(m)
+title <- textGrob("Chi Squared P Values",gp=gpar(fontsize=30))
+padding <- unit(10,"mm")
+
+table <- gtable_add_rows(
+  t1, 
+  heights = grobHeight(title) + padding,
+  pos = 0)
+table <- gtable_add_grob(
+  table, 
+  title, 
+  1, 1, 1, ncol(table))
+
+grid.newpage()
+grid.draw(table)
