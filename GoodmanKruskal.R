@@ -1,4 +1,4 @@
-data_reduced <- data[,c(2,3,4,6,7,8,10,12)]
+data_reduced <- data[,c(2,3,4,5,6,7,8,10,12)]
 
 
 #code below shoudl work but doesn't because dataset is too large for memory
@@ -24,6 +24,7 @@ m[1,5]<-GKtau(data_reduced[,1],data_reduced[,5])$tauxy
 m[1,6]<-GKtau(data_reduced[,1],data_reduced[,6])$tauxy
 m[1,7]<-GKtau(data_reduced[,1],data_reduced[,7])$tauxy
 m[1,8]<-GKtau(data_reduced[,1],data_reduced[,8])$tauxy
+m[1,9]<-GKtau(data_reduced[,1],data_reduced[,9])$tauxy
 
 m[2,1]<-GKtau(data_reduced[,2],data_reduced[,1])$tauxy
 m[2,2]<-GKtau(data_reduced[,2],data_reduced[,2])$tauxy
@@ -33,6 +34,7 @@ m[2,5]<-GKtau(data_reduced[,2],data_reduced[,5])$tauxy
 m[2,6]<-GKtau(data_reduced[,2],data_reduced[,6])$tauxy
 m[2,7]<-GKtau(data_reduced[,2],data_reduced[,7])$tauxy
 m[2,8]<-GKtau(data_reduced[,2],data_reduced[,8])$tauxy
+m[2,9]<-GKtau(data_reduced[,2],data_reduced[,9])$tauxy
 
 m[3,1]<-GKtau(data_reduced[,3],data_reduced[,1])$tauxy
 m[3,2]<-GKtau(data_reduced[,3],data_reduced[,2])$tauxy
@@ -42,6 +44,7 @@ m[3,5]<-GKtau(data_reduced[,3],data_reduced[,5])$tauxy
 m[3,6]<-GKtau(data_reduced[,3],data_reduced[,6])$tauxy
 m[3,7]<-GKtau(data_reduced[,3],data_reduced[,7])$tauxy
 m[3,8]<-GKtau(data_reduced[,3],data_reduced[,8])$tauxy
+m[3,9]<-GKtau(data_reduced[,3],data_reduced[,9])$tauxy
 
 m[4,1]<-GKtau(data_reduced[,4],data_reduced[,1])$tauxy
 m[4,2]<-GKtau(data_reduced[,4],data_reduced[,2])$tauxy
@@ -51,6 +54,7 @@ m[4,5]<-GKtau(data_reduced[,4],data_reduced[,5])$tauxy
 m[4,6]<-GKtau(data_reduced[,4],data_reduced[,6])$tauxy
 m[4,7]<-GKtau(data_reduced[,4],data_reduced[,7])$tauxy
 m[4,8]<-GKtau(data_reduced[,4],data_reduced[,8])$tauxy
+m[4,9]<-GKtau(data_reduced[,4],data_reduced[,9])$tauxy
 
 m[5,1]<-GKtau(data_reduced[,5],data_reduced[,1])$tauxy
 m[5,2]<-GKtau(data_reduced[,5],data_reduced[,2])$tauxy
@@ -60,6 +64,7 @@ m[5,5]<-GKtau(data_reduced[,5],data_reduced[,5])$tauxy
 m[5,6]<-GKtau(data_reduced[,5],data_reduced[,6])$tauxy
 m[5,7]<-GKtau(data_reduced[,5],data_reduced[,7])$tauxy
 m[5,8]<-GKtau(data_reduced[,5],data_reduced[,8])$tauxy
+m[5,9]<-GKtau(data_reduced[,5],data_reduced[,9])$tauxy
 
 m[6,1]<-GKtau(data_reduced[,6],data_reduced[,1])$tauxy
 m[6,2]<-GKtau(data_reduced[,6],data_reduced[,2])$tauxy
@@ -69,6 +74,7 @@ m[6,5]<-GKtau(data_reduced[,6],data_reduced[,5])$tauxy
 m[6,6]<-GKtau(data_reduced[,6],data_reduced[,6])$tauxy
 m[6,7]<-GKtau(data_reduced[,6],data_reduced[,7])$tauxy
 m[6,8]<-GKtau(data_reduced[,6],data_reduced[,8])$tauxy
+m[6,9]<-GKtau(data_reduced[,6],data_reduced[,9])$tauxy
 
 m[7,1]<-GKtau(data_reduced[,7],data_reduced[,1])$tauxy
 m[7,2]<-GKtau(data_reduced[,7],data_reduced[,2])$tauxy
@@ -78,6 +84,7 @@ m[7,5]<-GKtau(data_reduced[,7],data_reduced[,5])$tauxy
 m[7,6]<-GKtau(data_reduced[,7],data_reduced[,6])$tauxy
 m[7,7]<-GKtau(data_reduced[,7],data_reduced[,7])$tauxy
 m[7,8]<-GKtau(data_reduced[,7],data_reduced[,8])$tauxy
+m[7,9]<-GKtau(data_reduced[,7],data_reduced[,9])$tauxy
 
 m[8,1]<-GKtau(data_reduced[,8],data_reduced[,1])$tauxy
 m[8,2]<-GKtau(data_reduced[,8],data_reduced[,2])$tauxy
@@ -87,6 +94,17 @@ m[8,5]<-GKtau(data_reduced[,8],data_reduced[,5])$tauxy
 m[8,6]<-GKtau(data_reduced[,8],data_reduced[,6])$tauxy
 m[8,7]<-GKtau(data_reduced[,8],data_reduced[,7])$tauxy
 m[8,8]<-GKtau(data_reduced[,8],data_reduced[,8])$tauxy
+m[8,9]<-GKtau(data_reduced[,8],data_reduced[,9])$tauxy
+
+m[9,1]<-GKtau(data_reduced[,9],data_reduced[,1])$tauxy
+m[9,2]<-GKtau(data_reduced[,9],data_reduced[,2])$tauxy
+m[9,3]<-GKtau(data_reduced[,9],data_reduced[,3])$tauxy
+m[9,4]<-GKtau(data_reduced[,9],data_reduced[,4])$tauxy
+m[9,5]<-GKtau(data_reduced[,9],data_reduced[,5])$tauxy
+m[9,6]<-GKtau(data_reduced[,9],data_reduced[,6])$tauxy
+m[9,7]<-GKtau(data_reduced[,9],data_reduced[,7])$tauxy
+m[9,8]<-GKtau(data_reduced[,9],data_reduced[,8])$tauxy
+m[9,9]<-GKtau(data_reduced[,9],data_reduced[,9])$tauxy
 
 #Plot of GK associations 
 title <- "Goodman Kurskal Associations"
