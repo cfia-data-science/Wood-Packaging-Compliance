@@ -8,9 +8,24 @@ m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
 #iterate
 for(i in 1:ncol(data_reduced)){
    for (j in 1:ncol(data_reduced)){
-     m[i,j]=try(GKtau(data_reduced[,i],data_reduced[,j])$tauxy, silent=TRUE) #"try" because certain pairs require too much memory to process
+     m[i,j]=try(GKtau(data_reduced[,i],data_reduced[,j])$tauxy) #"try" because certain pairs require too much memory to process
    }
 }
+
+#fixing error values
+m[3,3]<- 1
+m[4,3]<- NA 
+m[6,3]<- NA
+m[3,4]<- NA
+m[4,4]<- 1
+m[6,4]<- NA
+m[3,6]<- NA
+m[4,6]<- NA
+m[6,6]<- 1
+
+# change to numeric
+m <- apply(m,c(1, 2),as.numeric) 
+
 
 #Plot of GK associations 
 title <- "Goodman Kurskal Associations"
