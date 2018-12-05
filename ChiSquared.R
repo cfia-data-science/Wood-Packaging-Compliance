@@ -179,3 +179,9 @@ table <- gtable_add_grob(
 
 grid.newpage()
 grid.draw(table)
+
+#chisquared test for months
+monthBreakdown<-as.data.frame.matrix(table(data$Month, data$Compliant..Y.N.))
+monthBreakdown$Rate <- monthBreakdown$N/(monthBreakdown$N+monthBreakdown$Y)
+chisq.test(monthBreakdown)
+
