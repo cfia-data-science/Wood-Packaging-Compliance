@@ -7,6 +7,11 @@ if(!("Month" %in% colnames(data))) {
   data <- data.frame(data, Month = month)
 }
 
+#create variable season
+seasonRef<- data.frame(Month = c(01,02,03,04,05,06,07,08,09,10,11,12), Season = c("Winter","Winter","Spring", "Spring","Spring","Summer","Summer", "Summer", "Autumn", "Autumn", "Autumn", "Winter"))
+data<- merge(data, seasonRef, by = "Month")
+data<- data[,c(2:23,1)]
+
 # create variable "Coast"
 if(!("Coast" %in% colnames(data))) {
   coast <- c()
