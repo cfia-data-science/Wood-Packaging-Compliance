@@ -8,15 +8,9 @@ m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
 #iterate
 for(i in 1:ncol(data_reduced)){
    for (j in 1:ncol(data_reduced)){
-     m[i,j]=try(GKtau(data_reduced[,i],data_reduced[,j])$tauxy) #"try" because certain pairs require too much memory to process
+     m[i,j]=try(GKtau(data_reduced[,i],data_reduced[,j])$tauxy, silent=TRUE) #"try" because certain pairs require too much memory to process
    }
 }
-
-#Change non numeric values to NA
-m<- as.numeric(m.test)
-m[!is.numeric(m.test)] <- NA
-m<-matrix(m.test,ncol = length(names), nrow = length(names), dimnames=list(names,names))
-
 
 #Plot of GK associations 
 title <- "Goodman Kurskal Associations"
