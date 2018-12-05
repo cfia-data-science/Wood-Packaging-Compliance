@@ -74,8 +74,6 @@ chisqmatrix <- function(x) {
 
 m<- as.data.frame.matrix(chisqmatrix(data_reduced))
 
-
-
 chisq.test(data$Compliant..Y.N., data$Compliant..Y.N.)
 
 names = colnames(data_reduced);  num = length(names)
