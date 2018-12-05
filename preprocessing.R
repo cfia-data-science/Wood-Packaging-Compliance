@@ -7,12 +7,6 @@ if(!("Month" %in% colnames(data))) {
   data <- data.frame(data, Month = month)
 }
 
-#create variable "season"
-
-if(!("Season" %in% colnames(data))){
-  season <- ifelse(data$Month == 1|2|12, "Winter",ifelse(data$Month == 3|4|5,"Spring", ifelse(data$Month == 6|7|8, "Summer", ifelse(data$Month == 9|10|11, "Spring"))))
-  data <- data.frame(data, Season = season)
-}
 # create variable "Coast"
 if(!("Coast" %in% colnames(data))) {
   coast <- c()
