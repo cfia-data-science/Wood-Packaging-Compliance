@@ -60,3 +60,8 @@ corrplot(m,method = "number")
 data_binary<- data[c(12:19)]
 GKmatrix<- GKtauDataframe(data_binary)
 plot(GKmatrix)
+
+# interesting country breakdown
+country<-as.data.frame.matrix(table(data$Shipper.Country, data$Compliant..Y.N.))
+country$Rate <- country$N/(country$Y+country$N)
+country[order(country[[3]]),]
