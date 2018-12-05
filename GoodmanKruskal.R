@@ -38,7 +38,7 @@ corrplot(m, method="color", col=col(200),
 #removed season
 title <- "Goodman Kurskal Associations"
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
-corrplot(m[,-10], method="color", col=col(200), 
+corrplot(m[-10,-10], method="color", col=col(200), 
          title=title,
          addCoef.col = "black", # Add coefficient of correlation
          mar=c(0,0,1,0) # fix location of title
@@ -47,7 +47,7 @@ corrplot(m[,-10], method="color", col=col(200),
 #removed month
 title <- "Goodman Kurskal Associations"
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
-corrplot(m[,-11], method="color", col=col(200), 
+corrplot(m[-11,-11], method="color", col=col(200), 
          title=title,
          addCoef.col = "black", # Add coefficient of correlation
          mar=c(0,0,1,0) # fix location of title
