@@ -3,6 +3,7 @@ data_reduced <- data[,c(2,3,4,5,6,7,8,10,12,23,24)]
 
 
 #GK Associations for all possible pairs
+#create matrix
 names = colnames(data_reduced);  num = length(names)
 m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
 #iterate

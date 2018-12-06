@@ -1,4 +1,4 @@
-#Adding year to end of data and creating contingency table
+#Adding year to end of data
 year <- as.numeric(format(as.Date(data$Exam.Date), "%y"))
 data<-cbind(data,year)
 
@@ -184,4 +184,14 @@ grid.draw(table)
 monthBreakdown<-as.data.frame.matrix(table(data$Month, data$Compliant..Y.N.))
 monthBreakdown$Rate <- monthBreakdown$N/(monthBreakdown$N+monthBreakdown$Y)
 chisq.test(monthBreakdown)
+
+#breaking down compliance by packaging and year
+yearSumPackaging<- as.data.frame.array(table(data$year, data$Compliant..Y.N.,data$Packaging.Material))
+yearSumPackaging$year<- c(2009:2018)
+
+grid.table(yearSumPackaging)
+yearSumPackaging.m<-melt(yearSumPackaging, id.vars = "year")
+ggplot()+
+  geom_bar(width = 0.7, data = yearSumPackaging.m, mapping = aes(year, value, fill=variable), stat="identity", position = position_dodge())+
+  ggtitle("Compliance by Year", subtitle = "2009-2018")
 
