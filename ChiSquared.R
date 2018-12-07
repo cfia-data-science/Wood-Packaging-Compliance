@@ -59,97 +59,25 @@ ggplot(data=monthlySummaryRate)+
   geom_bar(mapping=aes(x=yearMonth, y= Rate), stat="identity")+
   theme(axis.text.x = element_text(angle = 90, hjust = 1), legend.position="none")
 
-data_reduced <- data[,c(2,3,4,6,7,8,10,12)]
+#data reduced to relevant variables
+data_reduced <- data[,c(2,3,4,5,6,7,8,10,12,23,24)]
 
+#function to find chi squared values between all variables in a dataset
 chisqmatrix <- function(x) {
   names = colnames(x);  num = length(names)
   m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
   for (i in 1:(num-1)) {
     for (j in (i+1):num) {
-      m[i,j] = chisq.test(x[,i],x[,j],)$p.value
+      m[i,j] = try(chisq.test(x[,i],x[,j],)$p.value)
     }
   }
   return (m)
 }
 
-m<- as.data.frame.matrix(chisqmatrix(data_reduced))
-
-chisq.test(data$Compliant..Y.N., data$Compliant..Y.N.)
-
 names = colnames(data_reduced);  num = length(names)
-m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
+chi.m = matrix(nrow=num,ncol=num,dimnames=list(names,names))
 
-m[1,1]<-chisq.test(data_reduced[,1],data_reduced[,1])$p.value
-m[1,2]<-chisq.test(data_reduced[,1],data_reduced[,2])$p.value
-m[1,3]<-chisq.test(data_reduced[,1],data_reduced[,3])$p.value
-m[1,4]<-chisq.test(data_reduced[,1],data_reduced[,4])$p.value
-m[1,5]<-chisq.test(data_reduced[,1],data_reduced[,5])$p.value
-m[1,6]<-chisq.test(data_reduced[,1],data_reduced[,6])$p.value
-m[1,7]<-chisq.test(data_reduced[,1],data_reduced[,7])$p.value
-m[1,8]<-chisq.test(data_reduced[,1],data_reduced[,8])$p.value
-
-m[2,1]<-chisq.test(data_reduced[,2],data_reduced[,1])$p.value
-m[2,2]<-chisq.test(data_reduced[,2],data_reduced[,2])$p.value
-m[2,3]<-chisq.test(data_reduced[,2],data_reduced[,3])$p.value
-m[2,4]<-chisq.test(data_reduced[,2],data_reduced[,4])$p.value
-m[2,5]<-chisq.test(data_reduced[,2],data_reduced[,5])$p.value
-m[2,6]<-chisq.test(data_reduced[,2],data_reduced[,6])$p.value
-m[2,7]<-chisq.test(data_reduced[,2],data_reduced[,7])$p.value
-m[2,8]<-chisq.test(data_reduced[,2],data_reduced[,8])$p.value
-
-m[3,1]<-chisq.test(data_reduced[,3],data_reduced[,1])$p.value
-m[3,2]<-chisq.test(data_reduced[,3],data_reduced[,2])$p.value
-m[3,3]<-chisq.test(data_reduced[,3],data_reduced[,3])$p.value
-m[3,4]<-chisq.test(data_reduced[,3],data_reduced[,4])$p.value
-m[3,5]<-chisq.test(data_reduced[,3],data_reduced[,5])$p.value
-m[3,6]<-chisq.test(data_reduced[,3],data_reduced[,6])$p.value
-m[3,7]<-chisq.test(data_reduced[,3],data_reduced[,7])$p.value
-m[3,8]<-chisq.test(data_reduced[,3],data_reduced[,8])$p.value
-
-m[4,1]<-chisq.test(data_reduced[,4],data_reduced[,1])$p.value
-m[4,2]<-chisq.test(data_reduced[,4],data_reduced[,2])$p.value
-m[4,3]<-chisq.test(data_reduced[,4],data_reduced[,3])$p.value
-m[4,4]<-chisq.test(data_reduced[,4],data_reduced[,4])$p.value
-m[4,5]<-chisq.test(data_reduced[,4],data_reduced[,5])$p.value
-m[4,6]<-chisq.test(data_reduced[,4],data_reduced[,6])$p.value
-m[4,7]<-chisq.test(data_reduced[,4],data_reduced[,7])$p.value
-m[4,8]<-chisq.test(data_reduced[,4],data_reduced[,8])$p.value
-
-m[5,1]<-chisq.test(data_reduced[,5],data_reduced[,1])$p.value
-m[5,2]<-chisq.test(data_reduced[,5],data_reduced[,2])$p.value
-m[5,3]<-chisq.test(data_reduced[,5],data_reduced[,3])$p.value
-m[5,4]<-chisq.test(data_reduced[,5],data_reduced[,4])$p.value
-m[5,5]<-chisq.test(data_reduced[,5],data_reduced[,5])$p.value
-m[5,6]<-chisq.test(data_reduced[,5],data_reduced[,6])$p.value
-m[5,7]<-chisq.test(data_reduced[,5],data_reduced[,7])$p.value
-m[5,8]<-chisq.test(data_reduced[,5],data_reduced[,8])$p.value
-
-m[6,1]<-chisq.test(data_reduced[,6],data_reduced[,1])$p.value
-m[6,2]<-chisq.test(data_reduced[,6],data_reduced[,2])$p.value
-m[6,3]<-chisq.test(data_reduced[,6],data_reduced[,3])$p.value
-m[6,4]<-chisq.test(data_reduced[,6],data_reduced[,4])$p.value
-m[6,5]<-chisq.test(data_reduced[,6],data_reduced[,5])$p.value
-m[6,6]<-chisq.test(data_reduced[,6],data_reduced[,6])$p.value
-m[6,7]<-chisq.test(data_reduced[,6],data_reduced[,7])$p.value
-m[6,8]<-chisq.test(data_reduced[,6],data_reduced[,8])$p.value
-
-m[7,1]<-chisq.test(data_reduced[,7],data_reduced[,1])$p.value
-m[7,2]<-chisq.test(data_reduced[,7],data_reduced[,2])$p.value
-m[7,3]<-chisq.test(data_reduced[,7],data_reduced[,3])$p.value
-m[7,4]<-chisq.test(data_reduced[,7],data_reduced[,4])$p.value
-m[7,5]<-chisq.test(data_reduced[,7],data_reduced[,5])$p.value
-m[7,6]<-chisq.test(data_reduced[,7],data_reduced[,6])$p.value
-m[7,7]<-chisq.test(data_reduced[,7],data_reduced[,7])$p.value
-m[7,8]<-chisq.test(data_reduced[,7],data_reduced[,8])$p.value
-
-m[8,1]<-chisq.test(data_reduced[,8],data_reduced[,1])$p.value
-m[8,2]<-chisq.test(data_reduced[,8],data_reduced[,2])$p.value
-m[8,3]<-chisq.test(data_reduced[,8],data_reduced[,3])$p.value
-m[8,4]<-chisq.test(data_reduced[,8],data_reduced[,4])$p.value
-m[8,5]<-chisq.test(data_reduced[,8],data_reduced[,5])$p.value
-m[8,6]<-chisq.test(data_reduced[,8],data_reduced[,6])$p.value
-m[8,7]<-chisq.test(data_reduced[,8],data_reduced[,7])$p.value
-m[8,8]<-chisq.test(data_reduced[,8],data_reduced[,8])$p.value
+chi.m<-chisqmatrix(data_reduced)
 
 # plot of chi squared values. they are all zeroes so there is nothing meaningful from it
 title <- "Chi Squared Values"
@@ -184,6 +112,9 @@ grid.draw(table)
 monthBreakdown<-as.data.frame.matrix(table(data$Month, data$Compliant..Y.N.))
 monthBreakdown$Rate <- monthBreakdown$N/(monthBreakdown$N+monthBreakdown$Y)
 chisq.test(monthBreakdown)
+
+seasonBreakdown<- as.data.frame.matrix(table(data$Season,data$Compliant..Y.N.))
+seasonBreakdown$Rate <- seasonBreakdown$N/(seasonBreakdown$Y + seasonBreakdown$N)
 
 #breaking down compliance by packaging and year
 yearSumPackaging<- as.data.frame.array(table(data$year, data$Compliant..Y.N.,data$Packaging.Material))
