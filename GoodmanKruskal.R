@@ -45,10 +45,10 @@ corrplot(m[-10,-10], method="color", col=col(200),
          mar=c(0,0,1,0) # fix location of title
 )
 
-#removed month
+#removed month and others
 title <- "Goodman Kurskal Associations"
 col <- colorRampPalette(c("#BB4444", "#EE9988", "#FFFFFF", "#77AADD", "#4477AA"))
-corrplot(m[-11,-11], method="color", col=col(200), 
+corrplot(m[c(-1,-5,-3,-10),c(-1,-5,-3,-10)], method="color", col=col(200), 
          title=title,
          addCoef.col = "black", # Add coefficient of correlation
          mar=c(0,0,1,0) # fix location of title
