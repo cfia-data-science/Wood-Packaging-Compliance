@@ -1,3 +1,5 @@
+library(OneR)
+
 #data partition
 training_index <- createDataPartition(data$Compliant..Y.N., p = 0.8, list = FALSE)
 data_training <- data[training_index, ]

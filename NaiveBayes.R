@@ -1,8 +1,9 @@
 library(caret)
 library(e1071)
+library(naivebayes)
 set.seed(7267166)
 
-NBclassfier = naiveBayes(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Month + Packaging.Material , 
+NBclassfier <- naiveBayes(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Month + Packaging.Material , 
                          data=cart_data_training)
 print(NBclassfier)
 
