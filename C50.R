@@ -5,9 +5,10 @@ training_index <- createDataPartition(data$Compliant..Y.N., p = 0.8, list = FALS
 data_training <- data[training_index, ]
 data_testing <- data[-training_index, ]
 
-
+#create model
 model<- C5.0(x = data_training[3], y = data_training$Compliant..Y.N.)
 
+#show model error message
 summary(model)
 
 predictions <- predict(model, data_testing)
