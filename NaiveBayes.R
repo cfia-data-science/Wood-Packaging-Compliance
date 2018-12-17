@@ -23,7 +23,7 @@ pred_NB <- predict(NBclassfier, newdata= data_testing, type = "class")
 confusionMatrix(pred_NB, data_testing$Compliant..Y.N.)
 
 #undersampled model
-NBclassfier_under <- naiveBayes(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material , 
+NBclassfier_under <- naiveBayes(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
                           data=data_under)
 
 #Making predictions on undersampled model
@@ -44,3 +44,6 @@ pred_NB_over <- predict(NBclassfier_over, newdata= data_testing, type = "class")
 
 #confusion matrix
 confusionMatrix(pred_NB_over, data_testing$Compliant..Y.N.)
+
+#naieve bayes with crossvalidation
+
