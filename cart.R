@@ -64,16 +64,6 @@ plot(importance_cart_original, main = "Variable Importance in Original Model")
 rpart.plot(cart_original$finalModel, main = "CART Using Original Model", box.palette = "Reds")
 
 
-
-predict(cart_original, data.frame(
-    Packaging.Material = "WPM",
-    Port.of.Entry..map. = "Halifax, Nova Scotia",
-    Shipper.Country = "Albania",
-    Goods.Category = "Building Materials",
-    Month = "06",
-    Shipper.Name = "MINOVA RSA"
-))
-
 # original model predictions
 # predict: extract predictions and class probabilities from train objects
 # predict(object,

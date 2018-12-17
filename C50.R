@@ -14,3 +14,12 @@ summary(model)
 predictions <- predict(model, data_testing)
 
 confusionMatrix(predictions, data_testing$Compliant..Y.N.)
+
+#C5.0 using CARET Does not work
+model_c5 <- train (y = data_training$Compliant..Y.N., 
+              x = data_training[,c(3,8,9,10)], 
+              method = "C5.0", 
+              allowParallel = TRUE,
+              trControl = trainControl(method = "cv", number = 10))
+
+

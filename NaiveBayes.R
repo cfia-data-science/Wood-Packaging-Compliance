@@ -5,13 +5,13 @@ library(naivebayes)
 library(klaR)
 set.seed(7267166)
 
-#data partition
+#data partitions into training and testing sets
 training_index <- createDataPartition(data$Compliant..Y.N., p = 0.8, list = FALSE)
 data_training <- data[training_index, ]
 data_testing <- data[-training_index, ]
-#undersampled dataset
+#turning the training set into an undersampled dataset
 data_under<-ovun.sample(Compliant..Y.N.~., data=data_training, p=0.5, seed=1,  method="under")$data
-#oversampled dataset
+#turning the training set into an oversampled dataset
 data_over<-ovun.sample(Compliant..Y.N.~., data=data_training,  p=0.5, seed=1,  method="over")$data
 
 
@@ -51,6 +51,11 @@ pred_NB_cv <- predict(NBclassfier_cv, newdata= data_testing, type = "raw")
 #confusion matrix
 confusionMatrix(pred_NB_cv, data_testing$Compliant..Y.N.)
 
+#create NB model with cv
+NBclassfier_cv_over<- train(y = data_training$Compliant..Y.N., 
+                            x = data_training[,c(3,8,9,10)], 
+                            method = "nb",  
+                            trControl = trainControl(method = "cv", number = 10))
 
 #Create NB oversampled model with CV
 NBclassfier_cv_over<- train(y = data_over$Compliant..Y.N., 
@@ -73,7 +78,28 @@ pred_NB_cv_under <- predict(NBclassfier_cv_under, newdata= data_testing, type = 
 confusionMatrix(pred_NB_cv_under, data_testing$Compliant..Y.N.)
 
 
+# comparison between different models
+models <- list(original = NBclassfier_cv,
+               undersampled = NBclassfier_cv_under,
+               oversampled = NBclassfier_cv_over)
+models_resampling <- resamples(models)
+summary(models_resampling)
+bwplot(models_resampling)
 
+NB_rose <- train(x = cart_data_training[, c(3,8,9,10)],
+                   y = cart_data_training$Compliant..Y.N.,
+                   method = "nb",
+                   tuneLength = 10,
+                   metric = "ROC",
+                   trControl = trainControl(method = "repeatedcv",
+                                            number = 10,
+                                            repeats = 5,
+                                            classProbs = TRUE,
+                                            summaryFunction = twoClassSummary,
+                                            sampling = "rose"))
 
-
+#predictions
+pred_NB_rose<- predict(NB_rose, newdata= data_testing, type = "raw")
+#confusion matrix
+confusionMatrix(pred_NB_rose, data_testing$Compliant..Y.N.)
 
