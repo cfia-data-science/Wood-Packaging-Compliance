@@ -103,3 +103,19 @@ pred_NB_rose<- predict(NB_rose, newdata= data_testing, type = "raw")
 #confusion matrix
 confusionMatrix(pred_NB_rose, data_testing$Compliant..Y.N.)
 
+NB_smote <- train(x = cart_data_training[, c(3,8,9,10)],
+                     y = cart_data_training$Compliant..Y.N.,
+                     method = "rpart",
+                     tuneLength = 10,
+                     metric = "ROC",
+                     trControl = trainControl(method = "repeatedcv",
+                                              number = 10,
+                                              repeats = 5,
+                                              classProbs = TRUE,
+                                              summaryFunction = twoClassSummary,
+                                              sampling = "smote"))
+
+#predictions
+pred_NB_smote<- predict(NB_smote, newdata= data_testing, type = "raw")
+#confusion matrix
+confusionMatrix(pred_NB_smote, data_testing$Compliant..Y.N.)
