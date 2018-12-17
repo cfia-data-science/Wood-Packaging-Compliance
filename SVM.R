@@ -28,3 +28,14 @@ svm_model_over <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + 
 pred_SVM_over <- predict(svm_model_over, newdata= data_testing, type = "class")
 
 confusionMatrix(pred_SVM, data_testing$Compliant..Y.N.)
+
+#SVM alternate implementation using CARET
+SVM <- train (y = data_training$Compliant..Y.N., 
+              x = data_training[,c(3,8,9,10)], 
+              method = "svmPoly", 
+              allowParallel = TRUE,
+              trControl = trainControl(method = "cv", number = 10))
+
+pred <- predict(SVM, newdata= data_testing, type = "class")
+
+confusionMatrix(pred_SVM, data_testing$Compliant..Y.N.)

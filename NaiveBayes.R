@@ -71,3 +71,9 @@ NBclassfier_cv_under<- train(y = data_under$Compliant..Y.N.,
 pred_NB_cv_under <- predict(NBclassfier_cv_under, newdata= data_testing, type = "raw")
 #confusion matrix
 confusionMatrix(pred_NB_cv_under, data_testing$Compliant..Y.N.)
+
+
+
+
+
+
