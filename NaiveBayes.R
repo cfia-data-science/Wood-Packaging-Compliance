@@ -44,8 +44,10 @@ confusionMatrix(pred_NB_over, data_testing$Compliant..Y.N.)
 #Create naive bayes model with crossvalidation
 NBclassfier_cv<- train(y = data_training$Compliant..Y.N., 
                         x = data_training[,c(3,8,9,10)], 
-                        method = "nb",  
-                        trControl = trainControl(method = "cv", number = 10))
+                        method = "nb",
+                        tuneLength = 10,
+                        metric = "ROC",
+                        trControl = trainControl(method = "cv", number = 10, classProbs = TRUE))
 #predictions
 pred_NB_cv <- predict(NBclassfier_cv, newdata= data_testing, type = "raw")
 #confusion matrix
@@ -60,8 +62,10 @@ NBclassfier_cv_over<- train(y = data_training$Compliant..Y.N.,
 #Create NB oversampled model with CV
 NBclassfier_cv_over<- train(y = data_over$Compliant..Y.N., 
                         x = data_over[,c(3,8,9,10)], 
+                        tuneLength = 10,
+                        metric = "ROC",
                         method = "nb",  
-                        trControl = trainControl(method = "cv", number = 10))
+                        trControl = trainControl(method = "cv", number = 10, classProbs = TRUE))
 #predictions
 pred_NB_cv_over <- predict(NBclassfier_cv_over, newdata= data_testing, type = "raw")
 #confusion matrix
