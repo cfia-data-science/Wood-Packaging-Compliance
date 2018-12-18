@@ -38,4 +38,4 @@ SVM <- train (y = data_training$Compliant..Y.N.,
 
 pred <- predict(SVM, newdata= data_testing, type = "class")
 
-confusionMatrix(pred_SVM, data_testing$Compliant..Y.N.)
+confusionMatrix(pred, data_testing$Compliant..Y.N.)
