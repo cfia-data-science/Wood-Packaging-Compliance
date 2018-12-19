@@ -30,7 +30,7 @@ set.seed(1)
 # weights: a numeric vector of case weights
 # na.action: a function to specify the action to be taken if NAs are found
 # trControl: a list of values that define how this function acts
-cart_original <- train(x = cart_data_training[-6],
+cart_original <- train(x = cart_data_training[,c(3,8,9,10)],
                        y = cart_data_training$Compliant..Y.N.,
                        method = "rpart",
                        tuneLength = 10,
@@ -89,7 +89,7 @@ cart_weights <- ifelse(cart_data_training$Compliant..Y.N. == "Y",
 
 # cart decision tree using weighted model
 set.seed(2)
-cart_weighted <- train(x = cart_data_training[, c(3, 8, 9, 10, 15, 21)],
+cart_weighted <- train(x = cart_data_training[,c(3,8,9,10)],
                         y = cart_data_training$Compliant..Y.N.,
                         method = "blackboost",
                         tuneLength = 10,
@@ -111,7 +111,7 @@ cm_cart_weighted <- confusionMatrix(predictions_cart_weighted, cart_data_testing
 
 # cart decision tree using down-sampled model
 set.seed(3)
-cart_down <- train(x = cart_data_training[, c(3, 8, 9, 10, 15, 21)],
+cart_down <- train(x = cart_data_training[,c(3,8,9,10)],
                     y = cart_data_training$Compliant..Y.N.,
                     method = "rpart",
                     tuneLength = 10,
@@ -132,7 +132,7 @@ cm_cart_down <- confusionMatrix(predictions_cart_down, cart_data_testing$Complia
 
 # cart decision tree using up-sampled model
 set.seed(4)
-cart_up <- train(x = cart_data_training[, c(3, 8, 9, 10, 15, 21)],
+cart_up <- train(x = cart_data_training[,c(3,8,9,10)],
                   y = cart_data_training$Compliant..Y.N.,
                   method = "rpart",
                   tuneLength = 10,
@@ -164,7 +164,7 @@ rosest <- list(name = "ROSE",
 
 # cart decision tree using rose model
 set.seed(5)
-cart_rose <- train(x = cart_data_training[, c(3, 8, 9, 10, 15, 21)],
+cart_rose <- train(x = cart_data_training[,c(3,8,9,10)],
                     y = cart_data_training$Compliant..Y.N.,
                     method = "rpart",
                     tuneLength = 10,
@@ -196,7 +196,7 @@ smotest <- list(name = "SMOTE",
 
 # cart decision tree using smote model
 set.seed(6)
-cart_smote <- train(x = cart_data_training[, c(3, 8, 9, 10, 15, 21)],
+cart_smote <- train(x = cart_data_training[,c(3,8,9,10)],
                      y = cart_data_training$Compliant..Y.N.,
                      method = "rpart",
                      tuneLength = 10,
