@@ -5,3 +5,4 @@ Every year, hundreds of billions of merchandise is imported to Canada.  All of t
 
 In an effort to enhance the effectiveness of targeting of packages for inspection, our team at CFIA has developed a tool that  can accurately identify high-risk wood packages with regards to compliance verification.
 
+https://irmmodelling.shinyapps.io/wpm-predictor/
