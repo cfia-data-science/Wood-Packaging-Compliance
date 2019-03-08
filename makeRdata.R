@@ -1,12 +1,6 @@
 save(list_shipper_country,
      list_port_of_entry,
      list_goods_category,
-     list_month,
-     list_africa_other,
-     list_americas_other,
-     list_asia_other,
-     list_europe_other,
-     list_oceania_other,
      percent,
-     cart_weighted,
+     cart_down,
      file = "model.Rdata")
