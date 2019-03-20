@@ -5,6 +5,6 @@ account: irmmodelling
 server: shinyapps.io
 hostUrl: https://api.shinyapps.io/v1
 appId: 403560
-bundleId: 1550693
+bundleId: 1958869
 url: https://irmmodelling.shinyapps.io/wpm-predictor/
-when: 1535033712.61532
+when: 1553281272.70829
