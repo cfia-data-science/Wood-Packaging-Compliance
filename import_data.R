@@ -1,2 +1,2 @@
-data <- read.csv("./dataset/WPMCombined.csv", head = TRUE, sep = ",", quote = "\"")
+data <- read.csv("./wpm_data/WPM.csv", head = TRUE, sep = ",", quote = "\"")
 
