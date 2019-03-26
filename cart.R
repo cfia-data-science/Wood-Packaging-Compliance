@@ -1,17 +1,3 @@
-# stratified sampling
-set.seed(123)
-# createDataPartition(y,
-#                     p,
-#                     list)
-# y: a vector of outcomes
-# p: the percentage of data that goes to training
-# list: logical - should the results be in a list (TRUE) or a matrix with the number of rows equal to floor(p * length(y)) and times columns
-cart_training_index <- createDataPartition(data$Compliant..Y.N., p = 0.8, list = FALSE)
-
-# create training data
-cart_data_training <- reduced_data[cart_training_index, ]
-cart_data_testing <- reduced_data[-cart_training_index, ]
-
 # cart decision tree
 set.seed(1)
 # train: fit predictive models over different tuning parameters
@@ -30,8 +16,8 @@ set.seed(1)
 # weights: a numeric vector of case weights
 # na.action: a function to specify the action to be taken if NAs are found
 # trControl: a list of values that define how this function acts
-cart_original <- train(x = cart_data_training[,c(3,8,9,10)],
-                       y = cart_data_training$Compliant..Y.N.,
+cart_original <- train(x = data_training[, c(3, 8, 9, 10)],
+                       y = data_training$Compliant..Y.N.,
                        method = "rpart",
                        tuneLength = 10,
                        metric = "ROC",
@@ -70,49 +56,48 @@ rpart.plot(cart_original$finalModel, main = "CART Using Original Model", box.pal
 #         newdata)
 # object: a model object for which prediction is desired
 # newdata: a new data frame for prediction
-predictions_cart_original <- predict(cart_original, cart_data_testing)
+predictions_cart_original <- predict(cart_original, data_testing)
 # confusionMatrix: create a confusion matrix
 # confusionMatrix(data,
 #                 reference)
 # data: a factor of predicted classes
 # reference a factor of classes to be used as the true results
-cm_cart_original <- confusionMatrix(predictions_cart_original, cart_data_testing$Compliant..Y.N.)
+cm_cart_original <- confusionMatrix(predictions_cart_original, data_testing$Compliant..Y.N.)
 cm_cart_original
+cm_cart_original$byClass["F1"]
+gmean_cart_original <- unname((cm_cart_original$byClass["Specificity"] * cm_cart_original$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_original
 
-dim(cart_data_testing)
-
-table(predictions_cart_original,cart_data_training$Compliant..Y.N.)
-# create model weights (they sum to 1)
-cart_weights <- ifelse(cart_data_training$Compliant..Y.N. == "Y",
-                       (1/table(cart_data_training$Compliant..Y.N.)[1]) * 0.5,
-                       (1/table(cart_data_training$Compliant..Y.N.)[2]) * 0.5)
-
-# cart decision tree using weighted model
+# cart decision tree using weighted data
 set.seed(2)
-cart_weighted <- train(x = cart_data_training[,c(3,8,9,10)],
-                        y = cart_data_training$Compliant..Y.N.,
-                        method = "blackboost",
-                        tuneLength = 10,
-                        weights = cart_weights,
-                        metric = "ROC",
-                        na.action = na.pass,
-                        trControl = trainControl(method = "repeatedcv",
-                                                 number = 10,
-                                                 repeats = 5,
-                                                 classProbs = TRUE,
-                                                 summaryFunction = twoClassSummary))
+cart_weighted <- train(x = data_training[, c(3, 8, 9, 10)],
+                       y = data_training$Compliant..Y.N.,
+                       method = "rpart",
+                       tuneLength = 10,
+                       weights = class_weights,
+                       metric = "ROC",
+                       na.action = na.pass,
+                       trControl = trainControl(method = "repeatedcv",
+                                                number = 10,
+                                                repeats = 5,
+                                                classProbs = TRUE,
+                                                summaryFunction = twoClassSummary))
 importance_cart_weighted <- varImp(cart_weighted, scale = FALSE)
 plot(importance_cart_weighted, main = "Variable Importance in Weighted Model")
 rpart.plot(cart_weighted$finalModel, main = "CART Using Weighted Model", box.palette = "Reds")
 
 # weighted model predictions
-predictions_cart_weighted <- predict(cart_weighted, cart_data_testing)
-cm_cart_weighted <- confusionMatrix(predictions_cart_weighted, cart_data_testing$Compliant..Y.N.)
+predictions_cart_weighted <- predict(cart_weighted, data_testing)
+cm_cart_weighted <- confusionMatrix(predictions_cart_weighted, data_testing$Compliant..Y.N.)
+cm_cart_weighted
+cm_cart_weighted$byClass["F1"]
+gmean_cart_weighted <- unname((cm_cart_weighted$byClass["Specificity"] * cm_cart_weighted$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_weighted
 
-# cart decision tree using down-sampled model
+# cart decision tree using under-sampled data
 set.seed(3)
-cart_down <- train(x = cart_data_training[,c(3,8,9,10)],
-                    y = cart_data_training$Compliant..Y.N.,
+cart_under <- train(x = data_under[, c(3, 8, 9, 10)],
+                    y = data_under$Compliant..Y.N.,
                     method = "rpart",
                     tuneLength = 10,
                     metric = "ROC",
@@ -120,106 +105,96 @@ cart_down <- train(x = cart_data_training[,c(3,8,9,10)],
                                              number = 10,
                                              repeats = 5,
                                              classProbs = TRUE,
-                                             summaryFunction = twoClassSummary,
-                                             sampling = "down"))
-importance_cart_down <- varImp(cart_down, scale = FALSE)
-plot(importance_cart_down, main = "Variable Importance in Down-sampled Model")
-rpart.plot(cart_down$finalModel, main = "CART Using Down-sampled Model", box.palette = "Reds")
+                                             summaryFunction = twoClassSummary))
+importance_cart_under <- varImp(cart_under, scale = FALSE)
+plot(importance_cart_under, main = "Variable Importance in under-sampled Model")
+rpart.plot(cart_under$finalModel, main = "CART Using under-sampled Model", box.palette = "Reds")
 
-# down-sampled model predictions
-predictions_cart_down <- predict(cart_down, cart_data_testing)
-cm_cart_down <- confusionMatrix(predictions_cart_down, cart_data_testing$Compliant..Y.N.)
+# under-sampled model predictions
+predictions_cart_under <- predict(cart_under, data_testing)
+cm_cart_under <- confusionMatrix(predictions_cart_under, data_testing$Compliant..Y.N.)
+cm_cart_under
+cm_cart_under$byClass["F1"]
+gmean_cart_under <- unname((cm_cart_under$byClass["Specificity"] * cm_cart_under$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_under
 
-# cart decision tree using up-sampled model
+# cart decision tree using over-sampled data
 set.seed(4)
-cart_up <- train(x = cart_data_training[,c(3,8,9,10)],
-                  y = cart_data_training$Compliant..Y.N.,
-                  method = "rpart",
-                  tuneLength = 10,
-                  metric = "ROC",
-                  trControl = trainControl(method = "repeatedcv",
-                                           number = 10,
-                                           repeats = 5,
-                                           classProbs = TRUE,
-                                           summaryFunction = twoClassSummary,
-                                           sampling = "up"))
-importance_cart_up <- varImp(cart_up, scale = FALSE)
-plot(importance_cart_up, main = "Variable Importance in Up-sampled Model")
-rpart.plot(cart_up$finalModel, main = "CART Using Up-sampled Model", box.palette = "Reds")
+cart_over <- train(x = data_over[, c(3, 8, 9, 10)],
+                   y = data_over$Compliant..Y.N.,
+                   method = "rpart",
+                   tuneLength = 10,
+                   metric = "ROC",
+                   trControl = trainControl(method = "repeatedcv",
+                                            number = 10,
+                                            repeats = 5,
+                                            classProbs = TRUE,
+                                            summaryFunction = twoClassSummary))
+importance_cart_over <- varImp(cart_over, scale = FALSE)
+plot(importance_cart_over, main = "Variable Importance in over-sampled Model")
+rpart.plot(cart_over$finalModel, main = "CART Using over-sampled Model", box.palette = "Reds")
 
-# up-sampled model predictions
-predictions_cart_up <- predict(cart_up, cart_data_testing)
-cm_cart_up <- confusionMatrix(predictions_cart_up, cart_data_testing$Compliant..Y.N.)
+# over-sampled model predictions
+predictions_cart_over <- predict(cart_over, data_testing)
+cm_cart_over <- confusionMatrix(predictions_cart_over, data_testing$Compliant..Y.N.)
+cm_cart_over
+cm_cart_over$byClass["F1"]
+gmean_cart_over <- unname((cm_cart_over$byClass["Specificity"] * cm_cart_over$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_over
 
-# rose sampling
-rosest <- list(name = "ROSE",
-               func = function(x, y) {
-                 dat <- if (is.data.frame(x)) x else as.data.frame(x)
-                 dat$.y <- y
-                 dat <- ROSE(.y ~ ., data = dat, hmult.majo = 1, hmult.mino = 1)$data
-                 list(x = dat[, !grepl(".y", colnames(dat), fixed = TRUE)], 
-                      y = dat$.y)
-               },
-               first = TRUE)
-
-# cart decision tree using rose model
+# cart decision tree using rose data
 set.seed(5)
-cart_rose <- train(x = cart_data_training[,c(3,8,9,10)],
-                    y = cart_data_training$Compliant..Y.N.,
-                    method = "rpart",
-                    tuneLength = 10,
-                    metric = "ROC",
-                    trControl = trainControl(method = "repeatedcv",
-                                             number = 10,
-                                             repeats = 5,
-                                             classProbs = TRUE,
-                                             summaryFunction = twoClassSummary,
-                                             sampling = rosest))
+cart_rose <- train(x = data_rose[, c(3, 8, 9, 10)],
+                   y = data_rose$Compliant..Y.N.,
+                   method = "rpart",
+                   tuneLength = 10,
+                   metric = "ROC",
+                   trControl = trainControl(method = "repeatedcv",
+                                            number = 10,
+                                            repeats = 5,
+                                            classProbs = TRUE,
+                                            summaryFunction = twoClassSummary))
 importance_cart_rose <- varImp(cart_rose, scale = FALSE)
 plot(importance_cart_rose, main = "Variable Importance in ROSE Model")
 rpart.plot(cart_rose$finalModel, main = "CART Using ROSE Model", box.palette = "Reds")
 
 # rose model predictions
-predictions_cart_rose <- predict(cart_rose, cart_data_testing)
-cm_cart_rose <- confusionMatrix(predictions_cart_rose, cart_data_testing$Compliant..Y.N.)
+predictions_cart_rose <- predict(cart_rose, data_testing)
+cm_cart_rose <- confusionMatrix(predictions_cart_rose, data_testing$Compliant..Y.N.)
+cm_cart_rose
+cm_cart_rose$byClass["F1"]
+gmean_cart_rose <- unname((cm_cart_rose$byClass["Specificity"] * cm_cart_rose$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_rose
 
-# smote sampling
-smotest <- list(name = "SMOTE",
-                func = function(x, y) {
-                  dat <- if (is.data.frame(x)) x else as.data.frame(x)
-                  dat$.y <- y
-                  dat <- SMOTE(.y ~ ., data = dat, perc.over=100, k = 5)
-                  list(x = dat[, !grepl(".y", colnames(dat), fixed = TRUE)], 
-                       y = dat$.y)
-                },
-                first = TRUE)
-
-# cart decision tree using smote model
+# cart decision tree using smote data
 set.seed(6)
-cart_smote <- train(x = cart_data_training[,c(3,8,9,10)],
-                     y = cart_data_training$Compliant..Y.N.,
-                     method = "rpart",
-                     tuneLength = 10,
-                     metric = "ROC",
-                     trControl = trainControl(method = "repeatedcv",
-                                              number = 10,
-                                              repeats = 5,
-                                              classProbs = TRUE,
-                                              summaryFunction = twoClassSummary,
-                                              sampling = smotest))
+cart_smote <- train(x = data_smote[, c(3, 8, 9, 10)],
+                    y = data_smote$Compliant..Y.N.,
+                    method = "rpart",
+                    tuneLength = 10,
+                    metric = "ROC",
+                    trControl = trainControl(method = "repeatedcv",
+                                             number = 10,
+                                             repeats = 5,
+                                             classProbs = TRUE,
+                                             summaryFunction = twoClassSummary))
 importance_cart_smote <- varImp(cart_smote, scale = FALSE)
 plot(importance_cart_smote, main = "Variable Importance in SMOTE Model")
 rpart.plot(cart_smote$finalModel, main = "CART Using SMOTE Model", box.palette = "Reds")
 
 # smote model predictions
-predictions_cart_smote <- predict(cart_smote, cart_data_testing)
-cm_cart_smote <- confusionMatrix(predictions_cart_smote, cart_data_testing$Compliant..Y.N.)
+predictions_cart_smote <- predict(cart_smote, data_testing)
+cm_cart_smote <- confusionMatrix(predictions_cart_smote, data_testing$Compliant..Y.N.)
+cm_cart_smote
+cm_cart_smote$byClass["F1"]
+gmean_cart_smote <- unname((cm_cart_smote$byClass["Specificity"] * cm_cart_smote$byClass["Sensitivity"]) ^ 0.5)
+gmean_cart_smote
 
 # comparison between different models
 models <- list(original = cart_original,
                weighted = cart_weighted,
-               down = cart_down,
-               up = cart_up,
+               under = cart_under,
+               over = cart_over,
                rose = cart_rose,
                smote = cart_smote)
 models_resampling <- resamples(models)
@@ -236,7 +211,7 @@ test_roc <- function(model, data) {
       predict(model, data, type = "prob")[, "N"])
 }
 models_roc <- models %>%
-  map(test_roc, data = cart_data_testing)
+  map(test_roc, data = data_testing)
 models_roc %>%
   map(auc)
 
@@ -252,7 +227,7 @@ for(roc in models_roc){
 results_roc <- bind_rows(results_roc)
 
 # Plot ROC curve for all 6 models
-ggplot_roc_curve <- ggplot(aes(x = FPR,  y = TPR, group = model), data = results_roc) +
+ggplot_roc_curve <- ggplot(aes(x = FPR,  y = TPR, groover = model), data = results_roc) +
   geom_line(aes(color = model), size = 1) +
   scale_color_manual(values = c("#000000", "#009E73", "#0072B2", "#D55E00", "#CC79A7", "#E69F00")) +
   geom_abline(intercept = 0, slope = 1, color = "gray", size = 1) +
@@ -267,13 +242,13 @@ plot(ggplot_roc_curve)
 #      cart_weighted[["finalModel"]][["cptable"]][2:10, "rel error"],
 #      xlim = rev(range(cart_weighted[["finalModel"]][["cptable"]][2:10, "CP"])),
 #      type="o")
-# plot(cart_down[["finalModel"]][["cptable"]][2:10, "CP"],
-#      cart_down[["finalModel"]][["cptable"]][2:10, "rel error"],
-#      xlim = rev(range(cart_down[["finalModel"]][["cptable"]][2:10, "CP"])),
+# plot(cart_under[["finalModel"]][["cptable"]][2:10, "CP"],
+#      cart_under[["finalModel"]][["cptable"]][2:10, "rel error"],
+#      xlim = rev(range(cart_under[["finalModel"]][["cptable"]][2:10, "CP"])),
 #      type="o")
-# plot(cart_up[["finalModel"]][["cptable"]][2:10, "CP"],
-#      cart_up[["finalModel"]][["cptable"]][2:10, "rel error"],
-#      xlim = rev(range(cart_up[["finalModel"]][["cptable"]][2:10, "CP"])),
+# plot(cart_over[["finalModel"]][["cptable"]][2:10, "CP"],
+#      cart_over[["finalModel"]][["cptable"]][2:10, "rel error"],
+#      xlim = rev(range(cart_over[["finalModel"]][["cptable"]][2:10, "CP"])),
 #      type="o")
 # plot(cart_rose[["finalModel"]][["cptable"]][2:10, "CP"],
 #      cart_rose[["finalModel"]][["cptable"]][2:10, "rel error"],
@@ -293,11 +268,11 @@ rpart.plot(cart_original$finalModel, main = "CART Using Original Model", box.pal
 plot(importance_cart_weighted, main = "Variable Importance in Weighted Model")
 rpart.plot(cart_weighted$finalModel, main = "CART Using Weighted Model", box.palette = "Reds")
 
-plot(importance_cart_down, main = "Variable Importance in Down-sampled Model")
-rpart.plot(cart_down$finalModel, main = "CART Using Down-sampled Model", box.palette = "Reds")
+plot(importance_cart_under, main = "Variable Importance in under-sampled Model")
+rpart.plot(cart_under$finalModel, main = "CART Using under-sampled Model", box.palette = "Reds")
 
-plot(importance_cart_up, main = "Variable Importance in Up-sampled Model")
-rpart.plot(cart_up$finalModel, main = "CART Using Up-sampled Model", box.palette = "Reds")
+plot(importance_cart_over, main = "Variable Importance in over-sampled Model")
+rpart.plot(cart_over$finalModel, main = "CART Using over-sampled Model", box.palette = "Reds")
 
 plot(importance_cart_rose, main = "Variable Importance in ROSE Model")
 rpart.plot(cart_rose$finalModel, main = "CART Using ROSE Model", box.palette = "Reds")
