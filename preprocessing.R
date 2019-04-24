@@ -1,6 +1,25 @@
 # rename target values
 data$Compliant..Y.N. <- factor(data$Compliant..Y.N., levels = c("Y", "N"))
 
+# create variable "Month"
+if(!("Month" %in% colnames(data))) {
+  month <- format(as.Date(data$Exam.Date, "%m/%d/%Y"), "%m")
+  data <- data.frame(data, Month = month)
+}
+
+# create variable "Coast"
+if(!("Coast" %in% colnames(data))) {
+  coast <- c()
+  for(i in seq(nrow(data))) {
+    if(grepl("British Columbia", data$Port.of.Entry..map.[i])) {
+      coast <- c(coast, "West")
+    } else {
+      coast <- c(coast, "East")
+    }
+  }
+  data <- data.frame(data, Coast = coast)
+}
+
 # fill up missing goods category
 goods_description_goods_category <- data.frame(Goods.Description = data$Goods.Description,
                                                Goods.Category = data$Goods.Category)

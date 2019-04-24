@@ -260,7 +260,7 @@ plot(ggplot_roc_curve)
 #      type="o")
 
 # open output file
-pdf(file = "./diagrams/pdf/models.pdf", width = 12, height = 8.5)
+pdf(file = "./diagrams/pdf/cart.pdf", width = 12, height = 8.5)
 
 plot(importance_cart_original, main = "Variable Importance in Original Model")
 rpart.plot(cart_original$finalModel, main = "CART Using Original Model", box.palette = "Reds")
