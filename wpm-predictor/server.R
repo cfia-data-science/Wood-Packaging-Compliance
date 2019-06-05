@@ -15,7 +15,7 @@ shinyServer(
     })
     
     output$result <- renderText({
-      result_prob <- predict(cart_down, df_predicting(), type = "prob")
+      result_prob <- predict(cart_under, df_predicting(), type = "prob")
       if (result_prob[2] < 0.5) {
         paste(
           "<div class='result-row'>",

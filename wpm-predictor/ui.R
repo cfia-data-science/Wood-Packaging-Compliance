@@ -1,12 +1,11 @@
 library(shiny)
-library(shinyjs)
 
 load("model.Rdata")
 
 shinyUI(
   fluidPage(
+    tags$head(includeScript("google-analytics.js")),
     theme = "custom.css",
-    useShinyjs(),
     fluidRow(
       class = "main-wrapper",
       column(
