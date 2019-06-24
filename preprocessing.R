@@ -1,10 +1,22 @@
 # rename target values
 data$Compliant..Y.N. <- factor(data$Compliant..Y.N., levels = c("Y", "N"))
 
+# create variable "Year"
+if(!("Year" %in% colnames(data))) {
+  year <- format(as.Date(data$Exam.Date, "%m/%d/%Y"), "%Y")
+  data <- data.frame(data, Year = year)
+}
+
 # create variable "Month"
 if(!("Month" %in% colnames(data))) {
   month <- format(as.Date(data$Exam.Date, "%m/%d/%Y"), "%m")
   data <- data.frame(data, Month = month)
+}
+
+# create variable "YearMonth"
+if(!("Year.Month" %in% colnames(data))) {
+  yearmonth <- format(as.Date(data$Exam.Date, "%m/%d/%Y"), "%Y, %m")
+  data <- data.frame(data, Year.Month = yearmonth)
 }
 
 # create variable "Coast"
@@ -38,7 +50,7 @@ for(i in seq(nrow(data))) {
   }
 }
 
-# uniform country names
+# standardize country names, we use the standard country names from Food and Agriculture Organization of the United Nations
 data$Shipper.Country <- as.character(data$Shipper.Country)
 data$Shipper.Country[which(data$Shipper.Country == "West Bank And Gaza Strip")] <- "Palestinian Territories"
 data$Shipper.Country[which(data$Shipper.Country == "Belarus (Russian Ruble)")] <- "Belarus"

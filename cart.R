@@ -49,7 +49,6 @@ importance_cart_original <- varImp(cart_original, scale = FALSE)
 plot(importance_cart_original, main = "Variable Importance in Original Model")
 rpart.plot(cart_original$finalModel, main = "CART Using Original Model", box.palette = "Reds")
 
-
 # original model predictions
 # predict: extract predictions and class probabilities from train objects
 # predict(object,
@@ -259,7 +258,7 @@ plot(ggplot_roc_curve)
 #      xlim = rev(range(cart_smote[["finalModel"]][["cptable"]][2:10, "CP"])),
 #      type="o")
 
-# open output file
+# output to pdf
 pdf(file = "./diagrams/pdf/cart.pdf", width = 12, height = 8.5)
 
 plot(importance_cart_original, main = "Variable Importance in Original Model")
@@ -284,5 +283,4 @@ bwplot(models_resampling)
 
 plot(ggplot_roc_curve)
 
-# close output file
 dev.off()
