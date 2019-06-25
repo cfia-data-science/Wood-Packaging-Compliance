@@ -28,6 +28,21 @@ cm_svmLinear_under$byClass["F1"]
 gmean_svmLinear_under <- unname((cm_svmLinear_under$byClass["Specificity"] * cm_svmLinear_under$byClass["Sensitivity"]) ^ 0.5)
 gmean_svmLinear_under
 
+# linear svm using over-sampled data
+set.seed(4)
+svmLinear_over <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
+                      kernel = "linear",
+                      data = data_over,
+                      cross = 10)
+
+# over-sampled model predictions
+predictions_svmLinear_over <- predict(svmLinear_over, data_testing)
+cm_svmLinear_over <- confusionMatrix(predictions_svmLinear_over, data_testing$Compliant..Y.N.)
+cm_svmLinear_over
+cm_svmLinear_over$byClass["F1"]
+gmean_svmLinear_over <- unname((cm_svmLinear_over$byClass["Specificity"] * cm_svmLinear_over$byClass["Sensitivity"]) ^ 0.5)
+gmean_svmLinear_over
+
 # linear svm using rose data
 set.seed(5)
 svmLinear_rose <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
@@ -43,9 +58,24 @@ cm_svmLinear_rose$byClass["F1"]
 gmean_svmLinear_rose <- unname((cm_svmLinear_rose$byClass["Specificity"] * cm_svmLinear_rose$byClass["Sensitivity"]) ^ 0.5)
 gmean_svmLinear_rose
 
+# linear svm using smote data
+set.seed(6)
+svmLinear_smote <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
+                       kernel = "linear",
+                       data = data_smote,
+                       cross = 10)
+
+# smote model predictions
+predictions_svmLinear_smote <- predict(svmLinear_smote, data_testing)
+cm_svmLinear_smote <- confusionMatrix(predictions_svmLinear_smote, data_testing$Compliant..Y.N.)
+cm_svmLinear_smote
+cm_svmLinear_smote$byClass["F1"]
+gmean_svmLinear_smote <- unname((cm_svmLinear_smote$byClass["Specificity"] * cm_svmLinear_smote$byClass["Sensitivity"]) ^ 0.5)
+gmean_svmLinear_smote
+
 # radial based svm
 set.seed(1)
-svmRadial_original <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material, 
+svmRadial_original <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
                           kernel = "radial",
                           data = data_training,
                           cross = 10)
@@ -60,7 +90,7 @@ gmean_svmRadial_original
 
 # radial based svm using under-sampled data
 set.seed(3)
-svmRadial_under <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material, 
+svmRadial_under <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
                        kernel = "radial",
                        data = data_under,
                        cross = 10)
@@ -73,9 +103,24 @@ cm_svmRadial_under$byClass["F1"]
 gmean_svmRadial_under <- unname((cm_svmRadial_under$byClass["Specificity"] * cm_svmRadial_under$byClass["Sensitivity"]) ^ 0.5)
 gmean_svmRadial_under
 
+# radial based svm using over-sampled data
+set.seed(4)
+svmRadial_over <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
+                      kernel = "radial",
+                      data = data_over,
+                      cross = 10)
+
+# over-sampled model predictions
+predictions_svmRadial_over <- predict(svmRadial_over, data_testing)
+cm_svmRadial_over <- confusionMatrix(predictions_svmRadial_over, data_testing$Compliant..Y.N.)
+cm_svmRadial_over
+cm_svmRadial_over$byClass["F1"]
+gmean_svmRadial_over <- unname((cm_svmRadial_over$byClass["Specificity"] * cm_svmRadial_over$byClass["Sensitivity"]) ^ 0.5)
+gmean_svmRadial_over
+
 # radial based svm using rose data
 set.seed(5)
-svmRadial_rose <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material, 
+svmRadial_rose <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
                       kernel = "radial",
                       data = data_rose,
                       cross = 10)
@@ -87,3 +132,18 @@ cm_svmRadial_rose
 cm_svmRadial_rose$byClass["F1"]
 gmean_svmRadial_rose <- unname((cm_svmRadial_rose$byClass["Specificity"] * cm_svmRadial_rose$byClass["Sensitivity"]) ^ 0.5)
 gmean_svmRadial_rose
+
+# radial based svm using smote data
+set.seed(5)
+svmRadial_smote <- svm(Compliant..Y.N. ~ Shipper.Country + Port.of.Entry..map. + Goods.Category + Packaging.Material,
+                       kernel = "radial",
+                       data = data_smote,
+                       cross = 10)
+
+# smote model predictions
+predictions_svmRadial_smote <- predict(svmRadial_smote, data_testing)
+cm_svmRadial_smote <- confusionMatrix(predictions_svmRadial_smote, data_testing$Compliant..Y.N.)
+cm_svmRadial_smote
+cm_svmRadial_smote$byClass["F1"]
+gmean_svmRadial_smote <- unname((cm_svmRadial_smote$byClass["Specificity"] * cm_svmRadial_smote$byClass["Sensitivity"]) ^ 0.5)
+gmean_svmRadial_smote
