@@ -5,10 +5,8 @@ nb_original <- train(x = data_training[, c(3, 8, 9, 10)],
                      method = "nb",
                      tuneLength = 10,
                      metric = "ROC",
-                     na.action = na.pass,
-                     trControl = trainControl(method = "repeatedcv",
+                     trControl = trainControl(method = "cv",
                                               number = 10,
-                                              repeats = 5,
                                               classProbs = TRUE,
                                               summaryFunction = twoClassSummary))
 
@@ -27,9 +25,8 @@ nb_under <- train(x = data_under[, c(3, 8, 9, 10)],
                   method = "nb",
                   tuneLength = 10,
                   metric = "ROC",
-                  trControl = trainControl(method = "repeatedcv",
+                  trControl = trainControl(method = "cv",
                                            number = 10,
-                                           repeats = 5,
                                            classProbs = TRUE,
                                            summaryFunction = twoClassSummary))
 
@@ -48,9 +45,8 @@ nb_over <- train(x = data_over[, c(3, 8, 9, 10)],
                  method = "nb",
                  tuneLength = 10,
                  metric = "ROC",
-                 trControl = trainControl(method = "repeatedcv",
+                 trControl = trainControl(method = "cv",
                                           number = 10,
-                                          repeats = 5,
                                           classProbs = TRUE,
                                           summaryFunction = twoClassSummary))
 
@@ -69,9 +65,8 @@ nb_rose <- train(x = data_rose[, c(3, 8, 9, 10)],
                  method = "nb",
                  tuneLength = 10,
                  metric = "ROC",
-                 trControl = trainControl(method = "repeatedcv",
+                 trControl = trainControl(method = "cv",
                                           number = 10,
-                                          repeats = 5,
                                           classProbs = TRUE,
                                           summaryFunction = twoClassSummary))
 
@@ -90,9 +85,8 @@ nb_smote <- train(x = data_smote[, c(3, 8, 9, 10)],
                   method = "nb",
                   tuneLength = 10,
                   metric = "ROC",
-                  trControl = trainControl(method = "repeatedcv",
+                  trControl = trainControl(method = "cv",
                                            number = 10,
-                                           repeats = 5,
                                            classProbs = TRUE,
                                            summaryFunction = twoClassSummary))
 
@@ -103,3 +97,37 @@ cm_nb_smote
 cm_nb_smote$byClass["F1"]
 gmean_nb_smote <- unname((cm_nb_smote$byClass["Specificity"] * cm_nb_smote$byClass["Sensitivity"]) ^ 0.5)
 gmean_nb_smote
+
+# comparison between different naive bayes models
+nb_models <- list(original = nb_original,
+                  under = nb_under,
+                  over = nb_over,
+                  rose = nb_rose,
+                  smote = nb_smote)
+nb_models_resampling <- resamples(nb_models)
+summary(nb_models_resampling)
+bwplot(nb_models_resampling)
+
+nb_models_roc <- nb_models %>%
+  map(test_roc, data = data_testing)
+nb_models_roc %>%
+  map(auc)
+
+nb_results_roc <- list(NA)
+num_model <- 1
+for(roc in nb_models_roc){
+  nb_results_roc[[num_model]] <- 
+    data_frame(TPR = roc$sensitivities,
+               FPR = 1 - roc$specificities,
+               model = names(nb_models)[num_model])
+  num_model <- num_model + 1
+}
+nb_results_roc <- bind_rows(nb_results_roc)
+
+# plot ROC curve for all 6 naive bayes models
+ggplot_nb_roc_curve <- ggplot(aes(x = FPR,  y = TPR, groover = model), data = nb_results_roc) +
+  geom_line(aes(color = model), size = 1) +
+  scale_color_manual(values = c("#000000", "#009E73", "#0072B2", "#D55E00", "#CC79A7", "#E69F00")) +
+  geom_abline(intercept = 0, slope = 1, color = "gray", size = 1) +
+  theme_bw(base_size = 18)
+plot(ggplot_nb_roc_curve)

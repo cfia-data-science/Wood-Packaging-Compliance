@@ -32,3 +32,13 @@ fuzzify <- function(x, y, value) {
   x[which(x %in% setdiff(x, y))] <- value
   return(x)
 }
+
+test_roc <- function(model, data) {
+  # roc: build a ROC curve
+  # roc(response,
+  #     predictor)
+  # response: a factor, numeric or character vector of responses, typically encoded with 0 (controls) and 1 (cases)
+  # predictor: a numeric vector of the same length than response, containing the predicted value of each observation
+  roc(data$Compliant..Y.N.,
+      predict(model, data, type = "prob")[, "N"])
+}

@@ -116,10 +116,12 @@ training_index <- createDataPartition(data$Compliant..Y.N., p = 0.8, list = FALS
 data_training <- data[training_index, ]
 data_testing <- data[-training_index, ]
 
-# create class weights (they sum to 1)
+# create class weights
+weight_Y <- nrow(data_training) / (2 * table(data_training$Compliant..Y.N.)[1])
+weight_N <- nrow(data_training) / (2 * table(data_training$Compliant..Y.N.)[2])
 class_weights <- ifelse(data_training$Compliant..Y.N. == "Y",
-                       (1/table(data_training$Compliant..Y.N.)[1]) * 0.5,
-                       (1/table(data_training$Compliant..Y.N.)[2]) * 0.5)
+                        weight_Y,
+                        weight_N)
 
 # undersampled dataset
 data_under <- ovun.sample(Compliant..Y.N. ~ ., data = data_training, p = 0.5, seed = 1,  method = "under")$data
