@@ -4,7 +4,15 @@ load("model.Rdata")
 
 shinyUI(
   fluidPage(
-    tags$head(includeScript("google-analytics.js")),
+    tags$head(
+      tags$meta(charset = "UTF-8"),
+      tags$meta(property = "og:title", content = "WPMCP"),
+      tags$meta(property = "og:description", content = "Wood Packaging Material Compliance Predictor"),
+      tags$meta(property = "og:image", content = "WPMCP.png"),
+      tags$meta(property = "og:url", content = "//irmmodelling.shinyapps.io/wpm-predictor/"),
+      tags$title("WPM Compliance Predictor"),
+      includeScript("google-analytics.js")
+    ),
     theme = "custom.css",
     fluidRow(
       class = "main-wrapper",
@@ -16,7 +24,7 @@ shinyUI(
           div(
             class = "questions-wrapper",
             h2(
-              "WPM Compliance Calculator"
+              "WPM Compliance Predictor"
             ),
             HTML('<div id="packaging_material" class="form-group shiny-input-radiogroup shiny-input-container shinyjs-resettable shiny-bound-input" data-shinyjs-resettable-id="packaging_material" data-shinyjs-resettable-type="RadioButtons" data-shinyjs-resettable-value="WPM">'),
             tags$label(
